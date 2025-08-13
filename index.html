@@ -1,60 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spin Mini-App</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
+<meta charset="UTF-8">
+<title>عجلة الألوان</title>
+<style>
     body {
-      font-family: system-ui, sans-serif;
-      margin:0;
-      background:#0b1220;
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #f0f0f0;
+        flex-direction: column;
     }
-    header {
-      padding: 16px;
-      font-size: 18px;
+    .wheel-container {
+        position: relative;
+        width: 400px;
+        height: 400px;
     }
+    .wheel {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transition: transform 4s ease-out;
+    }
+.arrow {
+    position: absolute;
+    top: -35px; /* بدل bottom */
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg); /* قلبناه */
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 40px solid gold;
+    filter: drop-shadow(0px 0px 5px rgba(255,215,0,0.8));
+    z-index: 10;
+}
     button {
-      margin: 22px 0;
-      padding: 14px 22px;
-      border:0;
-      border-radius: 12px;
-      font-size:16px;
-      cursor:pointer;
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 18px;
     }
-    img {
-      width: 150px;
-      margin-top: 20px;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <header>🎯 لعبة السبين (نسخة مبسطة)</header>
-  <p>اضغط سبين وشوف نتيجتك</p>
-  <img src="Daco_5746224.png" alt="Wheel" />
-  <button id="spinBtn">Spin!</button>
 
-  <script>
-    const tg = window.Telegram?.WebApp;
-    if (tg) tg.expand();
+<div class="wheel-container">
+    <div class="arrow"></div>
+    <img src="Daco_5746224.png" class="wheel" id="wheel">
+</div>
+<button onclick="spin()">لف العجلة</button>
+<p id="result"></p>
 
-    document.getElementById('spinBtn').addEventListener('click', () => {
-      // نتيجة عشوائية بسيطة
-      const prizes = [0, 5, 10, 20, 50];
-      const pick = prizes[Math.floor(Math.random() * prizes.length)];
-      const payload = JSON.stringify({ result: pick });
+<script>
+    const wheel = document.getElementById("wheel");
+    const resultText = document.getElementById("result");
 
-      // ابعت النتيجة للبوت
-      if (tg?.sendData) tg.sendData(payload);
+    const colors = [
+        "أرجواني", // 0
+        "بنفسجي", // 1
+        "سماوي",  // 2
+        "أخضر",   // 3
+        "رمادي",  // 4
+        "أصفر",   // 5
+        "برتقالي",// 6
+        "أحمر"    // 7
+    ];
 
-      // اقفل الويب آب (اختياري)
-      tg?.close && tg.close();
-    });
-  </script>
+    let currentRotation = 0;
+
+    function spin() {
+        const spinDegrees = 360 * 5; // 5 لفات
+        const randomOffset = Math.floor(Math.random() * 360); // زاوية عشوائية
+        const finalRotation = currentRotation + spinDegrees + randomOffset;
+
+        wheel.style.transform = `rotate(${finalRotation}deg)`;
+
+        setTimeout(() => {
+            const normalized = (finalRotation % 360 + 360) % 360;
+            const offset = 360 / colors.length / 2; // علشان السهم في النص
+            const index = Math.floor(((360 - normalized + offset) % 360) / (360 / colors.length));
+            resultText.innerText = `اللون: ${colors[index]}`;
+            currentRotation = finalRotation % 360;
+        }, 4000); // نفس مدة الأنيميشن
+    }
+</script>
+
 </body>
 </html>
