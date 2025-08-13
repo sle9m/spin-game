@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Spin Game</title>
+<style>
+  body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+  }
+  h1 {
+    margin-top: 20px;
+  }
+  #wheel {
+    width: 300px;
+    margin-top: 20px;
+    transition: transform 3s ease-out;
+  }
+  button {
+    margin-top: 30px;
+    padding: 10px 25px;
+    font-size: 18px;
+    background: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #e64a19;
+  }
+</style>
+</head>
+<body>
+  <h1>🎯 Spin the Wheel!</h1>
+  <img id="wheel" src="https://i.ibb.co/3r7Pst6/wheel.png" alt="wheel">
+  <br>
+  <button onclick="spin()">Spin</button>
+
+  <script>
+    function spin() {
+      let deg = Math.floor(3000 + Math.random() * 3000); // دوران عشوائي
+      document.getElementById("wheel").style.transform = `rotate(${deg}deg)`;
+    }
+  </script>
+</body>
+</html>
