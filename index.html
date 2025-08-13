@@ -1,48 +1,60 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>Spin Game</title>
-<style>
-  body {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    background: #f3f3f3;
-  }
-  h1 {
-    margin-top: 20px;
-  }
-  #wheel {
-    width: 300px;
-    margin-top: 20px;
-    transition: transform 3s ease-out;
-  }
-  button {
-    margin-top: 30px;
-    padding: 10px 25px;
-    font-size: 18px;
-    background: #ff5722;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #e64a19;
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spin Mini-App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin:0;
+      background:#0b1220;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    header {
+      padding: 16px;
+      font-size: 18px;
+    }
+    button {
+      margin: 22px 0;
+      padding: 14px 22px;
+      border:0;
+      border-radius: 12px;
+      font-size:16px;
+      cursor:pointer;
+    }
+    img {
+      width: 150px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>🎯 Spin the Wheel!</h1>
-  <img id="wheel" src="Daco_5746224.png" alt="wheel">
-  <br>
-  <button onclick="spin()">Spin</button>
+  <header>🎯 لعبة السبين (نسخة مبسطة)</header>
+  <p>اضغط سبين وشوف نتيجتك</p>
+  <img src="Daco_5746224.png" alt="Wheel" />
+  <button id="spinBtn">Spin!</button>
 
   <script>
-    function spin() {
-      let deg = Math.floor(3000 + Math.random() * 3000); // دوران عشوائي
-      document.getElementById("wheel").style.transform = `rotate(${deg}deg)`;
-    }
+    const tg = window.Telegram?.WebApp;
+    if (tg) tg.expand();
+
+    document.getElementById('spinBtn').addEventListener('click', () => {
+      // نتيجة عشوائية بسيطة
+      const prizes = [0, 5, 10, 20, 50];
+      const pick = prizes[Math.floor(Math.random() * prizes.length)];
+      const payload = JSON.stringify({ result: pick });
+
+      // ابعت النتيجة للبوت
+      if (tg?.sendData) tg.sendData(payload);
+
+      // اقفل الويب آب (اختياري)
+      tg?.close && tg.close();
+    });
   </script>
 </body>
 </html>
